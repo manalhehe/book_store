@@ -1,0 +1,27 @@
+.nav-link {
+    position: relative;
+    padding-bottom: 5px;
+    cursor: pointer;
+    color: #2f3542;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ff4757; /* Turns Coral Red on hover */
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2.5px;
+    bottom: 0;
+    left: 50%;
+    background-color: #ff4757;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
