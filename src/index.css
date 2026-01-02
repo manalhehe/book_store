@@ -1,23 +1,32 @@
-/* Fade-in animation for sections */
-section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
+/* --- GRILLE RESPONSIVE POUR MOBILE --- */
+
+/* Configuration par défaut (PC/Tablette) */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
 }
 
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Configuration Spéciale Mobile (Ecran < 768px) */
+@media (max-width: 768px) {
+  .book-grid {
+    /* On force 2 colonnes pour voir plus de livres à la fois */
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important; /* Espacement réduit pour gagner de la place */
+    padding: 10px !important;
+  }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-  background: #ff4757;
-  border-radius: 10px;
+  /* Ajustement des titres pour mobile */
+  h2 {
+    font-size: 1.8rem !important;
+    margin-bottom: 20px !important;
+    text-align: center;
+  }
+
+  /* Ajustement de la section Hero (le haut de page) */
+  .hero-section {
+    padding: 40px 5% !important;
+    text-align: center;
+  }
 }
