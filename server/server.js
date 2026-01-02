@@ -36,7 +36,7 @@ const User = mongoose.model('User', new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 }));
 
-// AJOUT : Modèle Commande (Order) pour l'admin dashboard
+// Modèle Commande (Order) - CRUCIAL pour le Dashboard
 const Order = mongoose.model('Order', new mongoose.Schema({
   customerName: String,
   email: String,
@@ -107,7 +107,7 @@ app.delete('/api/books/:id', async (req, res) => {
   }
 });
 
-// --- 6. ROUTES DES COMMANDES (Pour Checkout & Admin) ---
+// --- 6. ROUTES DES COMMANDES ---
 
 // Enregistrer une vente (Appelé par CheckoutPage.jsx)
 app.post('/api/orders', async (req, res) => {
@@ -135,11 +135,17 @@ app.get('/api/imagekit-auth', (req, res) => {
   res.send(imagekit.getAuthenticationParameters());
 });
 
-// --- 7. LANCEMENT ---
-const PORT = 5000;
+// --- 7. CONNEXION ET EXPORT (Correction Spéciale Vercel) ---
+const PORT = process.env.PORT || 5000;
+
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅ MongoDB Connecté');
-    app.listen(PORT, () => console.log(`🚀 Serveur actif sur http://localhost:${PORT}`));
-  })
+  .then(() => console.log('✅ MongoDB Connecté'))
   .catch(err => console.error('❌ Erreur de connexion :', err));
+
+// On n'appelle app.listen que si on n'est pas sur Vercel (production)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(`🚀 Serveur local : http://localhost:${PORT}`));
+}
+
+// L'exportation est ce qui empêche l'erreur "Function has crashed"
+module.exports = app;
