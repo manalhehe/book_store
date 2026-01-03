@@ -41,12 +41,24 @@ function App() {
   }, []);
 
   const fetchBooks = () => {
-    // API FIX: Dynamic URL for Local vs Production (Vercel)
-    const apiUrl = import.meta.env.PROD ? '/api/books' : 'http://localhost:5000/api/books';
-    axios.get(apiUrl)
-      .then(res => setBooks(res.data.length > 0 ? res.data : EXAMPLE_BOOKS))
-      .catch(() => setBooks(EXAMPLE_BOOKS));
-  };
+  // Use the Netlify URL if live, or localhost if testing
+  const apiUrl = import.meta.env.PROD ? '/api/books' : 'http://localhost:5000/api/books';
+  
+  axios.get(apiUrl)
+    .then(res => {
+      // CRITICAL FIX: Ensure the data is actually an array before setting state
+      if (Array.isArray(res.data)) {
+        setBooks(res.data);
+      } else {
+        console.error("API did not return an array:", res.data);
+        setBooks(EXAMPLE_BOOKS); // Fallback to your example books
+      }
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      setBooks(EXAMPLE_BOOKS); // Fallback so the app doesn't crash
+    });
+};
 
   const handleNavigate = (newView) => {
     setView(newView);
